@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "191442769938",
+    "firebase_url": "https://parceled-278012.firebaseio.com",
+    "project_id": "parceled-278012",
+    "storage_bucket": "parceled-278012.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:191442769938:android:04f827dfc0d11bed45e0cb",
+        "android_client_info": {
+          "package_name": "com.parceled"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "191442769938-8conuphg64b8eo09p1auan62f47nr1e5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.parceled",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "191442769938-5bq06hi3h1e188ghbgigpoekh4uvi90c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw1Z91Rc9OxFrLqiwF-sdWKXB3v67TpfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "191442769938-5bq06hi3h1e188ghbgigpoekh4uvi90c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
