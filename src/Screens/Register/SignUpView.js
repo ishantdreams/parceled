@@ -7,7 +7,7 @@ import {
   Text,
   TextInput,
   View,
-  SafeAreaView
+  SafeAreaView,ActivityIndicator,Modal
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -15,7 +15,7 @@ import * as css from '../../Assets/Styles';
 import {scale} from '../../Services/ResponsiveScreen';
 import {lightColors, darkColors} from '../../Assets/Themes/colorThemes';
 import autobind from 'autobind-decorator';
-
+import AsyncStorage from '@react-native-community/async-storage';
 @inject('parcelStore', 'themeStore')
 @autobind
 @observer
@@ -30,6 +30,9 @@ export default class SignUpView extends Component {
       email: '',
       password: '',
       isDark: false,
+      full_name:'',
+      agreement:true,
+      loader:false
     };
   }
 
@@ -55,6 +58,13 @@ export default class SignUpView extends Component {
     console.log('isDarkEnable@@@@ ', '@@@@' + this.state.isDark);
   };
 
+
+  onChangeFullName(full_name){
+    this.setState({
+      full_name
+    })
+  }
+
   onChangeEmail(text) {
     this.setState({
       email: text,
@@ -66,6 +76,52 @@ export default class SignUpView extends Component {
       password: text,
     });
   }
+
+  onAgreement=()=>{
+this.setState({
+  agreement:!this.state.agreement
+})
+
+  }
+
+onSignUp=async()=>{
+  this.setState({loader:true})
+  const {full_name,email,password,agreement} = this.state
+const data = {
+full_name,
+email,
+password,
+agreement
+}
+ const BASE_API = "https://app.termsheet.com/api/register"
+
+const response = await fetch(`${BASE_API}`,{
+
+  method:'POST',
+  headers:{
+    'Content-Type':'application/json'
+  },
+  body:JSON.stringify(data)
+})
+const jsonData= await response.json()
+console.warn("******",jsonData)
+
+if(response.status ==200){
+  this.setState({loader:false})
+const authToken = jsonData.auth_token
+const user = jsonData.user
+this.setState({email:'',password:'',full_name})
+  await AsyncStorage.setItem('authToken', authToken);
+      await AsyncStorage.setItem('userData', JSON.stringify(user));
+      
+this.props.navigation.navigate("ParcelMap")
+
+}
+
+
+
+
+}
 
   render() {
     const screenStyles = StyleSheet.create({
@@ -209,6 +265,19 @@ export default class SignUpView extends Component {
           </View>
 
           <View style={screenStyles.content_root}>
+          <View style={[screenStyles.inputContainer,{marginBottom:"-12%"}]}>
+              <TextInput
+                {...commonInputProps}
+                autoFocus={false}
+                placeholder="Full Name"
+                keyboardType="default"
+                returnKeyType="done"
+                // onSubmitEditing={this._subscribe.bind(this)}
+                onChangeText={this.onChangeFullName}
+                
+              />
+            </View>
+
             <View style={screenStyles.inputContainer}>
               <TextInput
                 {...commonInputProps}
@@ -220,6 +289,8 @@ export default class SignUpView extends Component {
                 onChangeText={this.onChangeEmail.bind(this)}
               />
             </View>
+
+
 
             <View style={screenStyles.inputContainerPassword}>
               <TextInput
@@ -236,7 +307,8 @@ export default class SignUpView extends Component {
             <View style={screenStyles.signup_btn_root}>
               <Button
                 title="Sign Up"
-                // onPress={this._subscribe}
+                onPress={this.onSignUp}
+                //onPress={this._subscribe}
                 buttonStyle={screenStyles.sign_up_btn}
               />
             </View>
@@ -249,6 +321,22 @@ export default class SignUpView extends Component {
           ]}>
           I accept Term of Use and Privacy Policy
         </Text>
+
+
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={this.state.loader}
+        
+      >
+       <View style={{opacity:.9,flex:1,justifyContent:'center',alignItems:'center',}}> 
+       <ActivityIndicator
+        size="large"
+        color="#000"
+        /> 
+       </View>
+      </Modal>
+      
       </SafeAreaView>
     );
   }

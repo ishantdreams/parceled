@@ -53,10 +53,7 @@ export default class UserStore {
     }else{
       this.registerParceledUser(this.getDeviceId())
     }
-    //register Parceled User with Intercom
-    /*if(this.parceledUser && this.parceledUser.token){
-      Intercom.registerIdentifiedUser({ userId: this.parceledUser.token, tag: 'mobile' });
-    }*/
+    
   }
 
   getDeviceId = () => {

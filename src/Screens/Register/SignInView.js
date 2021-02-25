@@ -8,7 +8,7 @@ import {
   TextInput,
   View,
   Alert,
-  SafeAreaView
+  SafeAreaView,Modal,ActivityIndicator
 } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -39,6 +39,7 @@ export default class SignInView extends Component {
       email: '',
       password: '',
       isDark: false,
+      loader:false
     };
   }
 
@@ -77,6 +78,7 @@ export default class SignInView extends Component {
   }
 
   _signInAsync = async () => {
+    this.setState({loader:true})
     //await AsyncStorage.setItem('userToken', 'abc');
     if(!Utils.validateEmail(this.state.email) || !Utils.validatePassword(this.state.password)){
       return Alert.alert('Error', "Please enter a valid email or password");
@@ -84,6 +86,7 @@ export default class SignInView extends Component {
     this.loading = true;
     this.props.termSheetStore.login(this.state.email, this.state.password)
     .then(async ([user, authToken])=>{
+      this.setState({loader:false})
       await AsyncStorage.setItem('authToken', authToken);
       await AsyncStorage.setItem('userData', JSON.stringify(user));
       this.props.analyticsStore.identify(this.state.email);
@@ -99,6 +102,7 @@ export default class SignInView extends Component {
       
       this.props.navigation.dispatch(resetAction);
     }).catch(error => {
+      this.setState({loader:false})
       console.log(error)
       this.loading = false;
       Alert.alert('Error', 'Login failed, please check your login/password.')
@@ -295,6 +299,20 @@ export default class SignInView extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={this.state.loader}
+        
+      >
+       <View style={{opacity:.9,flex:1,justifyContent:'center',alignItems:'center',}}> 
+       <ActivityIndicator
+        size="large"
+        color="#000"
+        /> 
+       </View>
+      </Modal>
+      
       </SafeAreaView>
     );
   }

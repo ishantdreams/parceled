@@ -8,10 +8,10 @@ import {
   Image,
   TouchableOpacity,
   Switch,
-  Alert,
+  Alert,SafeAreaView
 } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
-import {SafeAreaView} from 'react-navigation';
+//import {SafeAreaView} from 'react-navigation';
 import * as css from '../../Assets/Styles';
 import {scale} from '../../Services/ResponsiveScreen';
 import autobind from 'autobind-decorator';
@@ -43,7 +43,7 @@ export default class ProfileView extends Component {
   componentDidMount() {
     this.props.navigation.addListener('willFocus', () => {
       this.initialSetup();
-
+      
       // this.props.userStore._loadAuth().then(() => {
       //   //if(this.props.userStore.isRegistered){
       //   console.log(
@@ -55,6 +55,13 @@ export default class ProfileView extends Component {
       // });
     });
   }
+
+onSignIn=async()=>{
+  const parceledUser = await AsyncStorage.getItem('parceledUserAuth');
+  console.warn(parceledUser)
+  this.props.navigation.navigate('SignInView')
+}
+
 
   onLogOut = () => {
     Alert.alert('', 'Are you sure want to Log Out?', [
@@ -115,7 +122,7 @@ export default class ProfileView extends Component {
 
   render() {
     // const {setScheme, isDark} = useTheme();
-
+console.warn("______",this.state.user? this.state.user.avatar_url:null)
     const screenStyles = StyleSheet.create({
       container: {
         alignItems: 'center',
@@ -216,13 +223,16 @@ export default class ProfileView extends Component {
               backgroundColor={css.colors.theme}
               translucent={false}
             />
-            <View style={screenStyles.profile_view}>
+            <View style={[screenStyles.profile_view,{backgroundColor:'',}]}>
               <Text style={screenStyles.title_row}>
                 {this.state.user !== null
                   ? this.state.user.full_name
                   : 'Not Sign in yet'}
               </Text>
-              <TouchableOpacity style={{marginRight: 15}} onPress={() => {}}>
+              <TouchableOpacity onPress={this.onSignIn}><Text  style={[screenStyles.title_row,{textDecorationLine:'underline',}]}>{this.state.user !== null
+                  ? null
+                  : 'Sign In'}</Text></TouchableOpacity>
+              {this.state.user !==null ? <TouchableOpacity style={{marginRight: 15}} onPress={() => {}}>
                 <Image
                   style={screenStyles.avatar}
                   source={
@@ -232,7 +242,9 @@ export default class ProfileView extends Component {
                   }
                   resizeMode="contain"
                 />
-              </TouchableOpacity>
+
+               
+              </TouchableOpacity>:null}
             </View>
 
             <View style={screenStyles.root_view}>
@@ -338,6 +350,7 @@ export default class ProfileView extends Component {
 
               {/* setting view */}
 
+
               {this.state.user !== null && (
                 <TouchableOpacity onPress={this.onLogOut}>
                   <View style={[screenStyles.item_root, {opacity: 0.5}]}>
@@ -352,6 +365,8 @@ export default class ProfileView extends Component {
               <View style={screenStyles.line_border} />
             </View>
           </View>
+
+
         </SafeAreaView>
       </Fragment>
     );

@@ -6,11 +6,11 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View,
+  View,SafeAreaView
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {SafeAreaView} from 'react-navigation';
+//import {SafeAreaView} from 'react-navigation';
 import * as css from '../../Assets/Styles';
 import {scale} from '../../Services/ResponsiveScreen';
 import {lightColors, darkColors} from '../../Assets/Themes/colorThemes';
@@ -37,6 +37,10 @@ export default class ForgotPasswordView extends Component {
     this.props.navigation.addListener('willFocus', () => {
       this._initialCall();
     });
+  }
+
+  onBack=()=>{
+    this.props.navigation.navigate('SignInView')
   }
 
   _initialCall = async () => {
@@ -225,7 +229,9 @@ export default class ForgotPasswordView extends Component {
               />
             </View>
 
+            <TouchableOpacity onPress={this.onBack}>
             <Text style={screenStyles.back_text}>Back to Sign In</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </SafeAreaView>
