@@ -227,7 +227,7 @@ console.warn("______",this.state.user? this.state.user.avatar_url:null)
               <Text style={screenStyles.title_row}>
                 {this.state.user !== null
                   ? this.state.user.full_name
-                  : 'Not Sign in yet'}
+                  : 'Not signed in'}
               </Text>
               <TouchableOpacity onPress={this.onSignIn}><Text  style={[screenStyles.title_row,{textDecorationLine:'underline',}]}>{this.state.user !== null
                   ? null

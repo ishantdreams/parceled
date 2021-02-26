@@ -399,7 +399,7 @@ export default class ParcelMap extends Component {
                 this.props.analyticsStore.identify(
                   this.props.userStore.parceledUser.token,
                 );
-                //this.props.iapStore.login(this.props.userStore.parceledUser.token)
+                // this.props.iapStore.login(this.props.userStore.parceledUser.token)
                 this.setState({countApi : this.state.countApi+1});
 
                 if (this.props.termSheetStore.isAuthenticated) {
